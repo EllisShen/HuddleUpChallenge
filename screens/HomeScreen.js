@@ -10,16 +10,37 @@ import {
     View,
 } from 'react-native';
 
-import {MonoText} from '../components/StyledText';
-
 export default class HomeScreen extends React.Component {
     static route = {
         navigationBar: {
             visible: false,
         },
+    };
+
+    constructor(props) {
+        super(props);
+        this._fetchImages = this._fetchImages.bind(this);
+    }
+
+    componentWillMount() {
+        // fetch images
+        this._fetchImages();
+    }
+
+    componentWillReceiveProps() {
+        // refetch images if _imagesArray is null
+        if (this._imagesArray) {
+            this._fetchImages();
+        }
     }
 
     render() {
+        // const {imageObj} = this.state;
+        let imageObj;
+        if (this._imagesArray) {
+            imageObj = this._imagesArray[this._getRandomInteger(0, this._imagesArray.length - 1)];
+        }
+
         return (
             <View style={styles.container}>
                 <Text style={styles.welcomeText}>Welcome to HuddleUp Challenge!</Text>
@@ -28,10 +49,14 @@ export default class HomeScreen extends React.Component {
                     Below you'll see a static image. On this screen you'll use the Pixabay API (www.pixabay.com) to load
                     a random image whenever you return to this tab.</Text>
                 <View style={styles.pixabayImage}>
-                    <Image
-                        style={{width: 320, height: 240, marginTop: 20, alignItems: 'center'}}
-                        source={{uri: 'https://cdn.pixabay.com/photo/2015/12/13/16/02/ios-1091302_640.jpg'}}
-                    />
+                    {
+                        imageObj &&
+                        <Image
+                            style={{width: 320, height: 240, marginTop: 20}}
+                            source={{uri: imageObj.webformatURL}}
+                            resizeMode={'cover'}
+                        />
+                    }
                 </View>
             </View>
         );
@@ -58,6 +83,33 @@ export default class HomeScreen extends React.Component {
                 </Text>
             );
         }
+    }
+
+    _getRandomInteger(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    _fetchImages() {
+        // fetch images via Pixabay API
+        const data = {
+            baseUrl: 'https://pixabay.com/api/',
+            key: '4391238-8e0e66f36eef8aa34267304cf',
+            q: 'tokyo_japan',
+            image_type: 'photo',
+        };
+
+        fetch(`${data.baseUrl}?key=${data.key}&q=${data.q}&image_type=${data.image_type}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((responseJson) => {
+                this._imagesArray = responseJson.hits;
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     _handleLearnMorePress = () => {
@@ -123,9 +175,10 @@ const styles = StyleSheet.create({
         paddingTop: 55,
     },
     pixabayImage: {
-        flex: 1,
+        flexGrow: 1,
         alignItems: 'center',
-        flexDirection: 'row',
+        justifyContent: 'center',
+        flexDirection: 'column',
     },
     tabBarInfoContainer: {
         position: 'absolute',
