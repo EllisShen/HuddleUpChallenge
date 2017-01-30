@@ -6,6 +6,7 @@ import {
     View,
     ListView,
     Dimensions,
+    Platform,
     ActivityIndicator,
 } from 'react-native';
 
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#c0a666',
     },
     sectionTitle: {
-        fontFamily: 'sans-serif',
+        fontFamily: Platform.OS === 'ios'? 'Helvetica' : 'sans-serif',
         fontSize: 16,
         textAlign: 'left',
         color: 'white'
@@ -203,13 +204,14 @@ const styles = StyleSheet.create({
         paddingLeft: 16,
     },
     foodTitle: {
-        fontFamily: 'sans-serif-medium',
+        fontFamily: Platform.OS === 'ios'? 'Helvetica' : 'sans-serif-medium',
+        fontWeight: '400',
         fontSize: 16,
         color: '#3A3A3A',
         textAlign: 'left',
     },
     foodCalories: {
-        fontFamily: 'sans-serif',
+        fontFamily: Platform.OS === 'ios'? 'Helvetica' : 'sans-serif',
         fontSize: 12,
         color: 'rgba(58, 58, 58, 1.00)',
         textAlign: 'left',
