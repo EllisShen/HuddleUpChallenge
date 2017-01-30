@@ -8,6 +8,7 @@ import {
     Text,
     TouchableOpacity,
     View,
+    Dimensions,
 } from 'react-native';
 
 export default class HomeScreen extends React.Component {
@@ -52,7 +53,7 @@ export default class HomeScreen extends React.Component {
                     {
                         imageObj &&
                         <Image
-                            style={{width: 320, height: 240, marginTop: 20}}
+                            style={{width: Dimensions.get('window').width, height: 240, marginTop: 20}}
                             source={{uri: imageObj.webformatURL}}
                             resizeMode={'cover'}
                         />
@@ -60,29 +61,6 @@ export default class HomeScreen extends React.Component {
                 </View>
             </View>
         );
-    }
-
-    _maybeRenderDevelopmentModeWarning() {
-        if (__DEV__) {
-            const learnMoreButton = (
-                <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-                    Learn more
-                </Text>
-            );
-
-            return (
-                <Text style={styles.developmentModeText}>
-                    Development mode is enabled, your app will run slightly slower but
-                    you have access to useful development tools. {learnMoreButton}.
-                </Text>
-            );
-        } else {
-            return (
-                <Text style={styles.developmentModeText}>
-                    You are not in development mode, your app will run at full speed.
-                </Text>
-            );
-        }
     }
 
     _getRandomInteger(min, max) {
@@ -126,45 +104,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    developmentModeText: {
-        marginBottom: 20,
-        color: 'rgba(0,0,0,0.4)',
-        fontSize: 15,
-        textAlign: 'center',
-    },
-    contentContainer: {
-        paddingTop: 80,
-    },
-    welcomeContainer: {
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 20,
-    },
-    welcomeImage: {
-        width: 200,
-        height: 34.5,
-        marginTop: 3,
-    },
-    getStartedContainer: {
-        alignItems: 'center',
-        marginHorizontal: 50,
-    },
-    homeScreenFilename: {
-        marginVertical: 7,
-    },
-    codeHighlightText: {
-        color: 'rgba(96,100,109, 0.8)',
-    },
-    codeHighlightContainer: {
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        borderRadius: 3,
-        paddingHorizontal: 4,
-    },
     descriptionText: {
         fontSize: 14,
         color: 'rgba(67,100,109, 1)',
         lineHeight: 15,
-        textAlign: 'left',
+        textAlign: 'center',
         paddingTop: 10,
     },
     welcomeText: {
@@ -179,25 +123,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
-    },
-    tabBarInfoContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'black',
-                shadowOffset: {height: -3},
-                shadowOpacity: 0.1,
-                shadowRadius: 3,
-            },
-            android: {
-                elevation: 20,
-            },
-        }),
-        alignItems: 'center',
-        backgroundColor: '#fbfbfb',
-        paddingVertical: 20,
-    },
+    }
 });
